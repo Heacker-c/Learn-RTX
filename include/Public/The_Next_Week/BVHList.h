@@ -4,6 +4,7 @@
 #include "AABB.h"
 #include "HitableList.h"
 #include <algorithm>
+#include <iostream>
 
 namespace RTX
 {

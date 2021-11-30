@@ -75,15 +75,12 @@ HittableList CornellBox()
 	return world;
 }
 
-void init()
+void init(const RayVec2& view)
 {
-    g_WindowTitle = str_WindowTitle;
-    g_withSkyBox = false;
-
     RayVec3 lookfrom(278.0f, 278.0f, -800.0f);
     RayVec3 lookat(278.0f, 278.0f, 0.0f);
     RayVec3 vup(0.0f, 1.0f, 0.0f);
-    RayPrecision aspect_ratio = 1.0f * g_imgSize.x / g_imgSize.y;
+    RayPrecision aspect_ratio = 1.0f * view.x / view.y;
     auto dist_to_focus = 25.0f;
     auto aperture = 0.1f;
 

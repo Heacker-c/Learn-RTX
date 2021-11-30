@@ -21,10 +21,12 @@ namespace RTX
 
             size_t object_span = end - start;
 
-            if (object_span == 1) {
+            if (object_span == 1)
+            {
                 left = right = list.objects[start];
             }
-            else if (object_span == 2) {
+            else if (object_span == 2)
+            {
                 if (comparator(list.objects[start], list.objects[start + 1])) {
                     left = list.objects[start];
                     right = list.objects[start + 1];
@@ -34,7 +36,8 @@ namespace RTX
                     right = list.objects[start];
                 }
             }
-            else {
+            else
+            {
                 std::sort(list.objects.begin() + start, list.objects.begin() + end, comparator);
 
                 auto mid = start + object_span / 2;

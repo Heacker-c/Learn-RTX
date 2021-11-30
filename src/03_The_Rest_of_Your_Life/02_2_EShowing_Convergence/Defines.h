@@ -1,7 +1,7 @@
 #ifndef _DEFINES_H_
 #define _DEFINES_H_
 
-#include <Public/The_Rest_of_Your_Life/Defines.h>
+#include <Public/Ingredients/defines.h>
 
 namespace Define
 {

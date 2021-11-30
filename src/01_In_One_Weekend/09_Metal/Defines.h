@@ -10,7 +10,6 @@
 #include <Public/In_One_Weekend/Material.h>
 #include <Public/In_One_Weekend/Lambertian.h>
 #include <Public/In_One_Weekend/Metal.h>
-#include <Public/In_One_Weekend/GlobalMain.h>
 
 namespace Define
 {
@@ -18,6 +17,7 @@ namespace Define
 	const std::string str_Subchapter = "09_Metal";
 	const std::string str_WindowTitle = str_Chapter + "_" + str_Subchapter;
 }
+#include <Public/In_One_Weekend/GlobalMain.h>
 
 #endif // !_DEFINES_H_
 

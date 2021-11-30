@@ -3,7 +3,8 @@
 
 using namespace Define;
 
-int main() {
+int main()
+{
 	int inside_circle = 0;
 	int inside_circle_stratified = 0;
 	int sqrt_N = 150;

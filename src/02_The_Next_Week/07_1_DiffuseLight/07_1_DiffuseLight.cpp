@@ -72,7 +72,7 @@ HittableList earth()
     world.add(ToPtr(new Sphere(RayVec3(0.0f, -300.5f, 0.0f), 300.0f, ToPtr(new Lambertian(pertext)))));
 
     auto light = ToPtr(new DiffuseLight(RayVec3(10.0f)));
-    world.add(ToPtr(new Sphere(RayVec3(0.0f, 4.5f, 0.0f), 1.5f, light)));
+    world.add(ToPtr(new Sphere(RayVec3(0.0f, 4.5f, 0.0f), 1.0f, light)));
 
     auto BVHNode = ToPtr(new BVH(world, 0.0f, 0.01f));
     world.clear();
@@ -81,14 +81,12 @@ HittableList earth()
     return world;
 }
 
-void init()
+void init(const RayVec2& view)
 {
-    g_WindowTitle = str_WindowTitle;
-    g_withSkyBox = false;
     RayVec3 lookfrom(26.0f, 3.0f, 6.0f);
     RayVec3 lookat(0.0f, 2.0f, 0.0f);
     RayVec3 vup(0.0f, 1.0f, 0.0f);
-    RayPrecision aspect_ratio = 1.0f * g_imgSize.x / g_imgSize.y;
+    RayPrecision aspect_ratio = 1.0f * view.x / view.y;
     auto dist_to_focus = length(lookfrom - lookat);
     auto aperture = 0.1f;
     g_camera = ToPtr(new MoveCamera(lookfrom, lookat,

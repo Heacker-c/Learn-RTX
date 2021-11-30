@@ -9,12 +9,13 @@
 #include <Public/In_One_Weekend/Lambertian.h>
 #include <Public/In_One_Weekend/Metal.h>
 #include <Public/In_One_Weekend/RayColor.h>
-#include <Public/In_One_Weekend/GlobalMain.h>
 
-namespace Define {
+namespace Define
+{
 	const std::string str_Chapter = "01_in_a_Weekend";
 	const std::string str_Subchapter = "10_3_Total_Internal";
 	const std::string str_WindowTitle = str_Chapter + "_" + str_Subchapter;
 }
+#include <Public/In_One_Weekend/GlobalMain.h>
 
 #endif // !_DEFINES_H_

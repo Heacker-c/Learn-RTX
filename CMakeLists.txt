@@ -1,9 +1,14 @@
 set(PROJECT_NAME "Learn-RTX")
 #---------------------------------------
+#set(CMAKE_DEBUG_POSTFIX "d") 
 macro(SETUP_PROJECT MODE TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
 	string(REPLACE " " ";" LIST_TARGET_SOURCES ${STR_TARGET_SOURCES})
 	string(REPLACE " " ";" LIST_TARGET_LIBS ${STR_TARGET_LIBS})
 	
+	IF(COMMAND cmake_policy)
+    CMAKE_POLICY(SET CMP0003 NEW)
+	ENDIF(COMMAND cmake_policy)
+
 	if(${STR_TARGET_SOURCES} STREQUAL " ")
 		message(WARNING "Target [${TARGET_NAME}] has no source, so it won't be generated.")
 	else()
@@ -12,7 +17,12 @@ macro(SETUP_PROJECT MODE TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
 			set(INSTALL_DIR "bin")
 		elseif(${MODE} STREQUAL "LIB")
 			add_library(${TARGET_NAME} ${LIST_TARGET_SOURCES})
-			set(INSTALL_DIR "lib/${FOLDER_NAME}")
+			if (CMAKE_BUILD_TYPE STREQUAL Debug)
+				set(INSTALL_DIR "lib/${FOLDER_NAME}d")
+			else()
+				set(INSTALL_DIR "lib/${FOLDER_NAME}")
+			endif()
+			#set(INSTALL_DIR "lib/${FOLDER_NAME}")
 		else()
 			message(FATAL_ERROR "Mode [${MODE}] is not supported, so target [TARGET_NAME] is not generated!")
 			set(MODE_NOTSUPPORT " ")
@@ -55,6 +65,8 @@ macro(INSTALL_SHADERS)
 		"${CMAKE_CURRENT_SOURCE_DIR}/*.vs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/*.fs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/*.gs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/*.comp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/*.glsl"
 	)
 
 	foreach(SHADER ${SHADERS})

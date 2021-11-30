@@ -1,10 +1,10 @@
 #ifndef _DEFINES_H_
 #define _DEFINES_H_
 
-#include <Public/The_Next_Week/Defines.h>
 #include "HitableList.h"
 #include <Public/The_Next_Week/MoveCamera.h>
 #include <Public/The_Next_Week/Material.h>
+#include <Public/The_Next_Week/GlobalMain.h>
 
 namespace Define 
 {

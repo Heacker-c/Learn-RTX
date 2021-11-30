@@ -10,7 +10,6 @@
 #include <Public/In_One_Weekend/Dielectrics.h>
 #include <Public/In_One_Weekend/RayColor.h>
 #include <Public/In_One_Weekend/Camera.h>
-#include <Public/In_One_Weekend/GlobalMain.h>
 
 namespace Define 
 {
@@ -18,5 +17,5 @@ namespace Define
 	const std::string str_Subchapter = "12_Defocus_Blur";
 	const std::string str_WindowTitle = str_Chapter + "_" + str_Subchapter;
 }
-
+#include <Public/In_One_Weekend/GlobalMain.h>
 #endif // !_DEFINES_H_

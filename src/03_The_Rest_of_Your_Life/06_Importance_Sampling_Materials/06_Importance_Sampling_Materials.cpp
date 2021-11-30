@@ -5,10 +5,6 @@
 #include <Public/The_Rest_of_Your_Life/RayColor.h>
 #include <Public/The_Rest_of_Your_Life/GlobalMain.h>
 
-using namespace CppUtil::Basic;
-using namespace RTX;
-using namespace Define;
-
 RayVec3 rayColor(CppUtil::Basic::Ptr<Ray> ray, HittableList& world, int depth)
 {
     return rayWithoutSkyBox(ray, world, depth);
@@ -47,15 +43,12 @@ HittableList CornellBox()
     return world;
 }
 
-void init()
+void init(const RayVec2& view)
 {
-    g_WindowTitle = str_WindowTitle;
-    g_withSkyBox = false;
-
     RayVec3 lookfrom(278.0f, 278.0f, -800.0f);
     RayVec3 lookat(278.0f, 278.0f, 0.0f);
     RayVec3 vup(0.0f, 1.0f, 0.0f);
-    RayPrecision aspect_ratio = 1.0f * g_imgSize.x / g_imgSize.y;
+    RayPrecision aspect_ratio = 1.0f * view.x / view.y;
     auto dist_to_focus = 25.0f;
     auto aperture = 0.1f;
 

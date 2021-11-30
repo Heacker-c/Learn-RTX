@@ -1,41 +1,19 @@
 #include "Defines.h"
 
-using namespace CppUtil::Basic;
-using namespace RTX;
-using namespace Define;
-
-int main(int argc, char** argv)
+void updatebuff(Canvas& canvas)
 {
-    ImgWindow imgWindow(str_WindowTitle);
-    if (!imgWindow.IsValid())
+    canvas.maxFrame(99999);
+    static int f = 0;
+#pragma omp parallel for schedule(dynamic, 4)
+    for (int i = 0; i < canvas.height(); i++)
     {
-        printf("ERROR: Image Window Create Fail.\n");
-        return 1;
-    }
-
-    Image& img = imgWindow.GetImg();
-    const int val_ImgWidth = img.GetWidth();
-    const int val_ImgHeight = img.GetHeight();
-    const int val_ImgChannel = img.GetChannel();
-
-    auto imgUpdate = ToPtr(new LambdaOp([&]()
+        for (int j = 0; j < canvas.width(); j++)
         {
-            static int f = 0;
-#pragma omp parallel for
-            for (int i = 0; i < img.GetWidth(); i++)
-            {
-                for (int j = 0; j < img.GetHeight(); j++)
-                {
-                    RayPrecision r = 0.5f * i / (RayPrecision)img.GetWidth();
-                    RayPrecision g = 0.5f * j / (RayPrecision)img.GetHeight();
-                    RayPrecision b = 0.2f + 0.2 * sinf(0.05f * f);
-                    img.SetPixel(img.GetWidth() - 1 - i, j, Image::Pixel<RayPrecision>(r, g, b));
-                }
-            }
-            ++f;
-        }, true));
-
-    imgWindow.Run(imgUpdate);
-    return 0;
+            auto ptr = &canvas.renderBuff[(i * canvas.width() + j) * 4];
+            ptr[0] = 0.5f * i / (RayPrecision)canvas.width();
+            ptr[1] = 0.5f * j / (RayPrecision)canvas.height();
+            ptr[2] = 0.5f + 0.4 * sinf(0.05f * f);
+        }
+    }
+    ++f;
 }
-

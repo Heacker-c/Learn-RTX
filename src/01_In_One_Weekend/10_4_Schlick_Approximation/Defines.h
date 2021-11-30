@@ -9,7 +9,6 @@
 #include <Public/In_One_Weekend/Lambertian.h>
 #include <Public/In_One_Weekend/Metal.h>
 #include <Public/In_One_Weekend/RayColor.h>
-#include <Public/In_One_Weekend/GlobalMain.h>
 
 namespace Define
 {
@@ -17,5 +16,5 @@ namespace Define
 	const std::string str_Subchapter = "10_4_Schlick_Approximation";
 	const std::string str_WindowTitle = str_Chapter + "_" + str_Subchapter;
 }
-
+#include <Public/In_One_Weekend/GlobalMain.h>
 #endif // !_DEFINES_H_

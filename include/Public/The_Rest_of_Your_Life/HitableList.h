@@ -2,7 +2,6 @@
 #define HITTABLE_LIST_H
 
 #include "Hitable.h"
-#include "Ray.h"
 
 namespace RTX 
 {

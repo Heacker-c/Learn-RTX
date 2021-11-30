@@ -43,12 +43,12 @@ HittableList FinalScene()
 
     auto glass = ToPtr(new Dielectric(1.5f, RayVec3(0.95f)));
     world.add(ToPtr(new Sphere(RayVec3(260.0f, 150.0f, 45.0f), 50.0f, glass)));
-    auto metal = ToPtr(new Metal(RayVec3(0.8, 0.8, 0.9), 1.0f));
+    auto metal = ToPtr(new Metal(RayVec3(0.8f, 0.8f, 0.9f), 1.0f));
     world.add(ToPtr(new Sphere(RayVec3(0.0f, 150.0f, 145.0f), 50.0f, metal)));
 
     auto boundary = ToPtr(new Sphere(RayVec3(360.0f, 150.0f, 145.0f), 70.0f, glass));
     world.add(boundary);
-    world.add(ToPtr(new ConstantMedium(boundary, 0.2, RayVec3(0.2, 0.4, 0.9))));
+    world.add(ToPtr(new ConstantMedium(boundary, 0.2f, RayVec3(0.2f, 0.4f, 0.9f))));
     //auto dust = ToPtr(new Sphere(RayVec3(0.0f), 5000.0f, glass));
     //world.add(ToPtr(new ConstantMedium(dust, 0.0001, RayVec3(0.95))));
 
@@ -71,15 +71,48 @@ HittableList FinalScene()
     return world;
 }
 
-void init()
+HittableList CornellBox()
 {
-    g_WindowTitle = str_WindowTitle;
-    g_withSkyBox = false;
+	HittableList world;
 
+	auto red = ToPtr(new Lambertian(RayVec3(0.65f, 0.05f, 0.05f)));
+	auto white = ToPtr(new Lambertian(RayVec3(0.73f)));
+	auto green = ToPtr(new Lambertian(RayVec3(0.12f, 0.45f, 0.15f)));
+	auto light = ToPtr(new DiffuseLight(RayVec3(15.0f)));
+	auto metal = ToPtr(new Metal(RayVec3(0.98f)));
+
+	//world.add(ToPtr(new FlipFace(ToPtr(new RectangleXZ(RayVec2(213.0f, 343.0f), RayVec2(227.0f, 332.0f), 554.0f, light)))));
+	world.add(ToPtr(new RectangleXZ(RayVec2(213.0f, 343.0f), RayVec2(227.0f, 332.0f), 554.0f, light)));
+
+	world.add(ToPtr(new RectangleYZ(RayVec2(0.0f, 555.0f), RayVec2(0.0f, 555.0f), 555.0f, green)));
+	world.add(ToPtr(new RectangleYZ(RayVec2(0.0f, 555.0f), RayVec2(0.0f, 555.0f), 0.0f, red)));
+	world.add(ToPtr(new RectangleXZ(RayVec2(0.0f, 555.0f), RayVec2(0.0f, 555.0f), 0.0f, white)));
+	world.add(ToPtr(new RectangleXZ(RayVec2(0.0f, 555.0f), RayVec2(0.0f, 555.0f), 555.0f, white)));
+	world.add(ToPtr(new RectangleXY(RayVec2(0.0f, 555.0f), RayVec2(0.0f, 555.0f), 555.0f, white)));
+
+	auto box1 = ToPtr(new Box(RayVec3(0.0f), RayVec3(165.0f, 330.0f, 165.0f), metal));
+	auto rot1 = ToPtr(new RotateY(box1, 25.0f));
+	auto trans1 = ToPtr(new Translate(rot1, RayVec3(265.0f, 0.0f, 295.0f)));
+	world.add(trans1);
+
+	auto box2 = ToPtr(new Box(RayVec3(0.0f), RayVec3(165.0f), white));
+	auto rot2 = ToPtr(new RotateY(box2, -18.0f));
+	auto trans2 = ToPtr(new Translate(rot2, RayVec3(130.0f, 0.5f, 65.0f)));
+	world.add(trans2);
+
+	auto BVHNode = ToPtr(new BVH(world, 0.0f, 0.001f));
+	world.clear();
+	world.add(BVHNode);
+
+	return world;
+}
+
+void init(const RayVec2& view)
+{
     RayVec3 lookfrom(478, 278, -600);
     RayVec3 lookat(278.0f, 278.0f, 0.0f);
     RayVec3 vup(0.0f, 1.0f, 0.0f);
-    RayPrecision aspect_ratio = 1.0f * g_imgSize.x / g_imgSize.y;
+    RayPrecision aspect_ratio = 1.0f * view.x / view.y;
     RayPrecision dist_to_focus = 10.0f;
     RayPrecision aperture = 0.1f;
 

@@ -1,7 +1,6 @@
 #ifndef _DEFINES_H_
 #define _DEFINES_H_
 
-#include <Public/The_Rest_of_Your_Life/Defines.h>
 #include <Public/The_Rest_of_Your_Life/AABB.h>
 #include <Public/The_Rest_of_Your_Life/BVHList.h>
 #include <Public/The_Rest_of_Your_Life/Camera.h>

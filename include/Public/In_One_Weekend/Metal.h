@@ -18,7 +18,7 @@ namespace RTX
 		{
 			RayVec3 reflected = reflect(normalize(ray->direction()), rec.normal);
 
-			if (fuzz > 0.01f)
+			if (fuzz > 0.001f)
 				reflected += fuzz * random_in_unit_sphere();
 
 			scattered = ToPtr(new Ray(rec.p, reflected));

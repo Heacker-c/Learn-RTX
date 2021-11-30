@@ -1,7 +1,7 @@
 #ifndef _RAY_H_
 #define _RAY_H_
 
-#include <Public/In_One_Weekend/Defines.h>
+#include <Public/Ingredients/Defines.h>
 
 namespace RTX 
 {

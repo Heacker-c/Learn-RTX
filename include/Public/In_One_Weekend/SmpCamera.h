@@ -9,9 +9,9 @@ namespace RTX
     {
         HEAP_OBJ_SETUP(Camera)
     public:
-        Camera()
+        Camera(const RayVec2& view)
         {
-            auto aspect_ratio = 16.0f / 9.0f;
+            auto aspect_ratio = 1.0 * view.x / view.y;
             auto viewport_height = 2.0f;
             auto viewport_width = aspect_ratio * viewport_height;
             auto focal_length = 1.0f;

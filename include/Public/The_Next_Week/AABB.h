@@ -1,7 +1,6 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "Defines.h"
 #include "Ray.h"
 
 namespace RTX 

@@ -3,7 +3,6 @@
 
 #include <CppUtil/Basic/HeapObj.h>
 #include "Ray.h"
-#include "Defines.h"
 
 namespace RTX
 {

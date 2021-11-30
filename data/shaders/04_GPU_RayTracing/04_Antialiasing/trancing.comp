@@ -1,0 +1,169 @@
+#version 430
+layout(local_size_x = 8, local_size_y = 8) in;
+layout(std430, binding = 0) buffer pixelVec { vec4 pixel[]; };
+layout(std430, binding = 1) buffer world { vec4 sphere []; };
+uniform vec2 viewSize;
+uniform vec2 viewSizeInv;
+
+uniform vec3 origin;
+uniform vec3 horizontal;
+uniform vec3 vertical;
+uniform vec3 lower_left_corner;
+uniform int shpereNum;
+uniform int currentFrame;
+
+const float PI = 3.14159265358979323846f;
+
+struct Sphere
+{
+    float radius;
+    vec3 center;
+};
+
+struct Ray
+{
+    vec2 tInterval;
+    vec3 orig;
+    vec3 dir;
+};
+
+struct HitRecord
+{
+    bool front_face;
+    int material;
+    float t;
+    vec3 p;
+    vec3 normal;
+};
+
+vec3 rayAt(inout Ray ray, float time)
+{
+    return ray.orig + ray.dir * time;
+}
+//物体外侧
+void set_face_normal(inout HitRecord rec, Ray ray, vec3 outward_normal)
+{
+    rec.front_face = dot(ray.dir, outward_normal) < 0;
+    rec.normal = rec.front_face ? outward_normal : -outward_normal;
+}
+//Sphere求交计算
+bool HitSphere(Sphere sph, inout Ray ray, inout HitRecord rec)
+{
+    vec3 oc = ray.orig - sph.center;
+    vec3 dir = ray.dir;
+    float a = dot(dir, dir);
+    float half_b = dot(oc, dir);
+    float c = dot(oc, oc) - sph.radius * sph.radius;
+    float discriminant = half_b * half_b - a * c;
+
+    if (discriminant < 0) return false;
+
+    float sqrtd = sqrt(discriminant);
+    float root = (-half_b - sqrtd) / a;
+    if (root < ray.tInterval.x || ray.tInterval.y < root)
+    {
+        root = (-half_b + sqrtd) / a;
+        if (root < ray.tInterval.x || ray.tInterval.y < root)
+            return false;
+    }
+
+    rec.t = root;
+    rec.p = rayAt(ray, rec.t);
+    vec3 outward_normal = (rec.p - sph.center) / sph.radius;
+    set_face_normal(rec, ray, outward_normal);
+
+    return true;
+}
+//初始化Sphere
+Sphere initSphere(vec4 sphere)
+{
+    Sphere shp;
+    shp.center = vec3(sphere.x, sphere.y, sphere.z);
+    shp.radius = sphere.w;
+    return shp;
+}
+//场景求交
+bool hitList(inout Ray ray, inout HitRecord rec)
+{
+    HitRecord temp_rec = rec;
+    bool hitAnything = false;
+ 
+    for (int i = 0; i < shpereNum; ++i)
+    {
+        if (HitSphere(initSphere(sphere[i]), ray, temp_rec))
+        {
+            hitAnything = true;
+            ray.tInterval.y = temp_rec.t;
+            rec = temp_rec;
+        }
+    }
+    return hitAnything;
+}
+//ray Color
+vec3 rayColor(Ray ray)
+{
+    ray.tInterval = vec2(0.001, 99999.999);
+    HitRecord rec;
+    if (hitList(ray, rec))
+        return 0.5f * (normalize(rec.normal) + vec3(1.0f));
+
+    float t = 0.5f * (normalize(ray.dir).y + 1.0f);
+    vec3 white = vec3(1.0f, 1.0f, 1.0f);
+    vec3 blue = vec3(0.5f, 0.7f, 1.0f);
+    return (1.0f - t) * white + t * blue;
+}
+//产生随机数
+uint tea(uint val0, uint val1)
+{
+    uint v0 = val0;
+    uint v1 = val1;
+    uint s0 = 0;
+
+    for (uint n = 0; n < 16; n++)
+    {
+        s0 += 0x9e3779b9;
+        v0 += ((v1 << 4) + 0xa341316c) ^ (v1 + s0) ^ ((v1 >> 5) + 0xc8013ea4);
+        v1 += ((v0 << 4) + 0xad90777d) ^ (v0 + s0) ^ ((v0 >> 5) + 0x7e95761e);
+    }
+
+    return v0;
+}
+
+uint lcg(uint prev)
+{
+    uint LCG_A = 1664525u;
+    uint LCG_C = 1013904223u;
+    prev = (LCG_A * prev + LCG_C);
+    return prev & 0x00FFFFFF;
+}
+
+float rnd(uint prev)
+{
+    return (float(lcg(prev)) / float(0x01000000));
+}
+
+Ray getRay(uint index, vec2 xy)
+{
+    uint seed = tea(index, currentFrame);
+    float r1 = rnd(seed);
+    float r2 = rnd(seed);
+    float sq = sqrt(1.0 - r2);
+    vec2 shake = vec2(cos(2.0 * PI * r1) * sq, sin(2.0 * PI * r1) * sq);
+    vec2 uv = (xy + shake) * viewSizeInv;
+
+    Ray ray;
+    ray.orig = origin;
+    ray.dir = lower_left_corner + uv.x * horizontal + uv.y * vertical - origin;
+    return ray;
+}
+
+void main()
+{
+    uvec2 view = uvec2(viewSize);
+    if (view.x > gl_GlobalInvocationID.x && view.y > gl_GlobalInvocationID.y)
+    {
+        uint index = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * view.x;
+        Ray ray = getRay(index, gl_GlobalInvocationID.xy);
+        pixel[index] = (pixel[index] * currentFrame + vec4(rayColor(ray), 1.0)) / (currentFrame + 1);
+    }
+}

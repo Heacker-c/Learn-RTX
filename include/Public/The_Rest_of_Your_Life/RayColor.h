@@ -5,6 +5,7 @@
 #include "HitableList.h"
 #include "Material.h"
 
+using namespace RTX;
 namespace Define
 {
     RayVec3 rayWithoutSkyBox(CppUtil::Basic::Ptr<Ray> ray, HittableList& world, int depth)

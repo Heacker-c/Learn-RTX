@@ -1,0 +1,23 @@
+#version 430
+layout(local_size_x = 8, local_size_y = 8) in;
+
+#include ../common/public.glsl
+
+layout(std430, binding = 0) buffer pixelVec { vec4 pixel []; };
+layout(std430, binding = 1) buffer world { Sphere sphere []; };
+layout(std430, binding = 2) buffer MaterialVec { Material material []; };
+
+#include ../common/random.glsl
+#include ../common/rayGen.glsl
+#include ../common/anyHit.glsl
+
+void main()
+{
+    uvec2 view = uvec2(viewSize);
+    if (view.x > gl_GlobalInvocationID.x && view.y > gl_GlobalInvocationID.y && currentFrame >= 0)
+    {
+        uint index = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * view.x;
+        Ray ray = getRay(index);
+        pixel[index].xyz = (pixel[index].xyz * currentFrame + rayColor(ray)) / (currentFrame + 1);
+    }
+}

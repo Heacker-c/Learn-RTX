@@ -17,9 +17,10 @@ namespace RTX
     HittableList creatWorld()
     {
         HittableList world;
-        std::vector<Hitable::CPtr> bvhData;
-        for (int a = -11; a < 11; a++) {
-            for (int b = -11; b < 11; b++) {
+        for (int a = -11; a < 11; a++)
+        {
+            for (int b = -11; b < 11; b++)
+            {
                 auto choose_mat = random();
                 RayVec3 center(a + 0.9f * random(), 0.2f, b + 0.9f * random());
 
