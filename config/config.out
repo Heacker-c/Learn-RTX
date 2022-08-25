@@ -46,7 +46,7 @@
 bin option = 111100;
 
 # 根目录
-string RootPath = "C:/Users/chenjinze/Documents/GitHub/Learn-RTX";
+string RootPath = "C:/wdm/Learn-RTX";
 
 # 默认输出图像大小
 #int val_Default_ImgWidth = 640;

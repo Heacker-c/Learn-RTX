@@ -1,6 +1,6 @@
-uvec2 seed;
 //产生随机数
-uvec2 tea(uint val0, uint val1)
+
+uint tea(uint val0, uint val1)
 {
     uint v0 = val0;
     uint v1 = val1;
@@ -13,16 +13,10 @@ uvec2 tea(uint val0, uint val1)
         v1 += ((v0 << 4) + 0xad90777d) ^ (v0 + s0) ^ ((v0 >> 5) + 0x7e95761e);
     }
 
-    return uvec2(v0, v1);
+    return v0;
 }
 
-uint lcg(uint prev)
-{
-    uint LCG_A = 1664525u;
-    uint LCG_C = 1013904223u;
-    prev = (LCG_A * prev + LCG_C);
-    return prev & 0x00FFFFFF;
-}
+uint wseed;
 
 uint whash(uint seed)
 {
@@ -31,28 +25,29 @@ uint whash(uint seed)
     seed = seed ^ (seed >> uint(4));
     seed *= uint(0x27d4eb2d);
     seed = seed ^ (seed >> uint(15));
-    return seed;
+    return seed * 0x125E591;
 }
-float rnd(uint prev)
+
+void seed(uint val0, uint val1)
 {
-    seed.x = whash(seed.y);
-    seed.y = whash(seed.x);
-    return (float(lcg(prev)) / float(0x01000000));
+    wseed = tea(val0, val1);
+}
+
+float rand()
+{
+	wseed = whash(wseed);
+
+	return float(wseed) / 4294967296.0;
 }
 
 float random(float min, float max)
 {
-    return (max - min) * (rnd(seed.x) - 0.5);
-}
-
-float rand(uint n)
-{
-    return fract(sin(mod(dot(float(n), 12.9898), 3.1415926f)) * 43758.5453);
+    return (max - min) * (rand() - 0.5);
 }
 
 vec3 randomVec3()
 {
-    return vec3(rnd(seed.x), rnd(seed.y), rnd(seed.x * seed.y));
+    return vec3(rand(), rand(), rand());
 }
 
 vec3 randomVec3(float min, float max)
@@ -62,12 +57,35 @@ vec3 randomVec3(float min, float max)
 
 vec3 random_in_unit_sphere()
 {
-    while (true)
-    {
-        vec3 p = randomVec3(-1.0, 1.0) * 0.78539815;
-        if (length_2(p) > 1.0) continue;
-        return p;
-    }
+#if 1
+    vec3 p = randomVec3(-1.0, 1.0)/* * 0.866025403784*/;
+    float len_2 = length_2(p);
+    if(len_2 > 1.0)
+        p /= sqrt(len_2);
+    return p;
+#else
+    const float pi = 3.14159265358979323846f;
+/*
+    float u = random(0.0, 1.0);
+    float v = random(0.0, 1.0);
+    float theta = pi * u;
+    float phi = acos(v - 1.0);
+    float x = sin(theta) * sin(phi);
+    float y = cos(theta) * sin(phi);
+    float z = cos(phi);
+    return vec3(x, y, z);
+//*/
+//*
+    float phi = random(0.0, 1.0) * pi;
+    float theta = random(-1.0, 1.0) * pi;
+    return vec3(sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi));
+//*/
+    vec3 p = randomVec3(-1.0, 1.0);
+    float len_2 = length_2(p);
+    if(len_2 > 1.0)
+        p /= sqrt(len_2);
+    return p;
+#endif
 }
 
 vec3 random_unit_vector()

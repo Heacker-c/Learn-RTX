@@ -1,10 +1,11 @@
-const int maxDepth = 7;
+const int maxDepth = 30;
 const float PI = 3.14159265358979323846f;
 
 uniform vec2 viewSize;
 uniform vec2 viewSizeInv;
 uniform int shpereNum;
 uniform int currentFrame;
+uniform int recursionDepth;
 
 uniform vec3 origin;
 uniform vec3 horizontal;
@@ -18,6 +19,7 @@ struct Ray
 {
     bool bRaytracing;
     int materialIndex;
+    int maxDepth;
     vec2 tInterval;
     vec3 orig;
     vec3 dir;

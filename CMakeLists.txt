@@ -90,9 +90,9 @@ set (${PROJECT_NAME}_VERSION_MINOR 0)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 
-configure_file(config/config.in ${CMAKE_SOURCE_DIR}/config/config.out)
-install(FILES "${CMAKE_SOURCE_DIR}/config/config.out"
-  DESTINATION config)
+#configure_file(config/config.in ${CMAKE_SOURCE_DIR}/config/config.out)
+#install(FILES "${CMAKE_SOURCE_DIR}/config/config.out"
+#  DESTINATION config)
 configure_file(config/ROOT_PATH.h.in config/ROOT_PATH.h)
 
 include_directories (

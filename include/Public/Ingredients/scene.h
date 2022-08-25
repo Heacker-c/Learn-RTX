@@ -12,20 +12,15 @@ void name(type name) { m_##name = name; }
 class Scene
 {
 public:
+    Scene(int w = 800, int h = 640) :m_width(w), m_height(h) {}
     virtual ~Scene() {}
-    void setDimensions(int w, int h)
-    {
-        m_width = w;
-        m_height = h;
-    }
     void initScene()
     {
         compileAndLinkShader();
         initBuffers();
-        glClearColor(0.75f, 0.75f, 0.75f, 0.75f);
-        //glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GLfloat verts[] = {
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        GLfloat verts[] =
+        {
             -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f,
             1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
             1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
@@ -67,25 +62,23 @@ public:
             curStep, speed, wholeTime, needTime, sumTime);
     }
 
-    void resize(int w, int h)
-    {
-        glViewport(0, 0, w, h);
-        m_width = w;
-        m_height = h;
-    }
-
     void render()
     {
         if (m_needDraw)
+        {
             renderEx();
+        }
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderProg.use();
 		renderProg.setUniform("width", m_width);
 		glBindVertexArray(quad);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+        glBindVertexArray(0);
     }
     void animate(bool value) { m_animate = value; }
     bool animating() { return m_animate; }
+    int width() { return m_width; }
+    int height() { return m_height; }
 
     virtual void renderEx() = 0;
     virtual void initBuffers() = 0;
@@ -93,8 +86,6 @@ public:
     EXPOTE(currentFrame, int);
     EXPOTE(maxFrame, int);
     EXPOTE(maxDepth, int);
-    EXPOTE(width, int);
-    EXPOTE(height, int);
 protected:
     void compileAndLinkShader()
     {
@@ -117,9 +108,10 @@ protected:
     bool m_needDraw = true;
     int m_currentFrame = -1;
     int m_maxFrame = 500;
-    int m_maxDepth = 7;
-    int m_width = 800, m_height = 600;
-    GLuint quad;
+    int m_maxDepth = 10;
+    int m_width;
+    int m_height;
+    GLuint quad = 0;
     GLSLProgram renderProg;
     Timer timer;
 };

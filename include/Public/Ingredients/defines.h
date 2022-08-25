@@ -59,9 +59,11 @@ namespace Define
 
     inline RayVec3 random_in_unit_sphere()
     {
-        while (true) {
+        while (true)
+        {
             auto p = randomVec3(-1.0f, 1.0f);
-            if (length_2(p) >= 1.0f) continue;
+            if (length_2(p) > 1.0f)
+                continue;
             return p;
         }
     }

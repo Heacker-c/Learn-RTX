@@ -8,5 +8,5 @@ void main()
 {
     uvec2 view = uvec2(viewSize);
     if (view.x > gl_GlobalInvocationID.x && view.y > gl_GlobalInvocationID.y)
-        pixel[gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * view.x] = vec4(vec2(gl_GlobalInvocationID.xy) / viewSize, 0.5f + 0.4 * sin(0.05f * currentFrame), 1.0);
+        pixel[gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * view.x] = vec4(vec2(gl_GlobalInvocationID.xy) / viewSize, 0.5f + 0.4 * sin(0.001f * currentFrame), 1.0);
 }

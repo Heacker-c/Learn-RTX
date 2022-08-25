@@ -1,9 +1,9 @@
 
 Ray getRay(uint index)
 {
-    seed = tea(index, currentFrame);
-    float r1 = rnd(seed.x);
-    float r2 = rnd(seed.y);
+    seed(index, currentFrame);
+    float r1 = rand();
+    float r2 = rand();
     float sq = sqrt(1.0 - r2);
     vec2 shake = vec2(cos(2.0 * PI * r1) * sq, sin(2.0 * PI * r1) * sq);
     vec2 uv = (gl_GlobalInvocationID.xy + shake) * viewSizeInv;
@@ -12,6 +12,7 @@ Ray getRay(uint index)
     vec3 offset = axisU * rd.x + axisV * rd.y;
 
     Ray ray;
+    ray.maxDepth = min(maxDepth, recursionDepth);
     ray.orig = origin + offset;
     ray.dir = lower_left_corner + uv.x * horizontal + uv.y * vertical - origin - offset;
     ray.bRaytracing = true;

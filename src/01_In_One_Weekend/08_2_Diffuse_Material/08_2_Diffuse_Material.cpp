@@ -50,7 +50,7 @@ void updatebuff(Canvas& canvas)
         {
             RayPrecision u = (j + random()) * part.x;
             RayPrecision v = (i + random()) * part.y;
-            RayVec3 color = rayColor(camera->GenRay(u, v), world);
+            RayVec3 color = rayColor(camera->GenRay(u, v), world, canvas.maxDepth());
             auto pixel = (RayVec3*)&canvas.renderBuff[(i * canvas.width() + j) * 4];
             color += *pixel * (RayVec3)canvas.currentFrame();
                         *pixel = color * vec3(1.0f / (canvas.currentFrame() + 1.0f));

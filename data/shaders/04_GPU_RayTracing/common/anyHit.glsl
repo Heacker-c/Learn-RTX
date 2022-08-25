@@ -64,7 +64,7 @@ void hitRay(inout Ray ray, HitRecord rec, inout vec3 color)
 {
     //1 diffuse 2 metal 3 transparent 4 fog
     ray.orig = rec.p;
-    ray.tInterval = vec2(0.001, 99999.99);
+    ray.tInterval = vec2(0.0001, 99999.99);
     ray.bRaytracing = true;
     Material mat = material[ray.materialIndex];
     color = mat.albedo;
@@ -104,7 +104,7 @@ void hitRay(inout Ray ray, HitRecord rec, inout vec3 color)
                 float cos_theta = min(dot(-unit_direction, rec.normal), 1.0f);
                 float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
 
-                bool cannot_refract = refraction_ratio * sin_theta > 1.0f || rand(seed.x) < schlick(cos_theta, refraction_ratio);
+                bool cannot_refract = refraction_ratio * sin_theta > 1.0f || rand() < schlick(cos_theta, refraction_ratio);
 
                 vec3 direction;
                 if (cannot_refract)
@@ -133,13 +133,13 @@ void hitRay(inout Ray ray, HitRecord rec, inout vec3 color)
 //ray Color
 vec3 rayColor(Ray ray)
 {
-    ray.tInterval = vec2(0.001, 99999.999);
+    ray.tInterval = vec2(0.0001, 99999.999);
     vec3 color[maxDepth + 1];
     int index = 0;
     while (true)
     {
         HitRecord rec;
-        if (index >= maxDepth)
+        if (index >= ray.maxDepth)
         {
             color[0] = vec3(0.0);
             break;

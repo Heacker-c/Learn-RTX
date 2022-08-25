@@ -1,12 +1,6 @@
 #version 430
 layout(local_size_x = 8, local_size_y = 8) in;
 
-struct Sphere
-{
-    vec3 center;
-    float radius;
-};
-
 float length_2(vec3 pos)
 {
     return pos.x * pos.x + pos.y * pos.y + pos.z * pos.z;
@@ -14,8 +8,15 @@ float length_2(vec3 pos)
 
 #include ../common/random.glsl
 
+struct Sphere
+{
+    vec3 center;
+    float radius;
+};
+
 layout(std430, binding = 0) buffer pixelVec { vec4 pixel[]; };
 layout(std430, binding = 1) buffer world { Sphere sphere []; };
+
 uniform vec2 viewSize;
 uniform vec2 viewSizeInv;
 
@@ -25,12 +26,14 @@ uniform vec3 vertical;
 uniform vec3 lower_left_corner;
 uniform int shpereNum;
 uniform int currentFrame;
+uniform int recursionDepth;
 
-const int maxDepth = 7;
-const float PI = 3.14159265358979323846f;
+const int maxDepth = 30;
+const float PI = 3.14159265358979323846;
 
 struct Ray
 {
+    int maxDepth;
     vec2 tInterval;
     vec3 orig;
     vec3 dir;
@@ -96,16 +99,15 @@ bool hitList(inout Ray ray, inout HitRecord rec)
     return hitAnything;
 }
 //ray Color
-#define hemisphere 1
 vec3 rayColor(Ray ray)
 {
-    ray.tInterval = vec2(0.001, 99999.999);
+    ray.tInterval = vec2(0.0001, 99999.999);
     vec3 color[maxDepth + 1];
     int index = 0;
     while (true)
     {
         HitRecord rec;
-        if (index >= maxDepth)
+        if (index >= ray.maxDepth)
         {
             color[0] = vec3(0.0);
             break;
@@ -114,16 +116,10 @@ vec3 rayColor(Ray ray)
         {
             ++index;
             ray.orig = rec.p;
-#if sphere
+
             ray.dir = rec.normal + random_in_unit_sphere();
-#endif 
-#if vector
-           ray.dir = random_unit_vector();
-#endif
-#if hemisphere
-            ray.dir = random_in_hemisphere(rec.normal);
-#endif
-            ray.tInterval = vec2(0.001, 99999.999);
+
+            ray.tInterval = vec2(0.0001, 99999.999);
             color[index] = vec3(0.5f);
         }
         else
@@ -142,14 +138,15 @@ vec3 rayColor(Ray ray)
 
 Ray getRay(uint index)
 {
-    seed = tea(index, currentFrame);
-    float r1 = rnd(seed.x);
-    float r2 = rnd(seed.y);
+    seed(index, currentFrame);
+    float r1 = rand();
+    float r2 = rand();
     float sq = sqrt(1.0 - r2);
     vec2 shake = vec2(cos(2.0 * PI * r1) * sq, sin(2.0 * PI * r1) * sq);
     vec2 uv = (gl_GlobalInvocationID.xy + shake) * viewSizeInv;
 
     Ray ray;
+    ray.maxDepth = min(maxDepth, recursionDepth);
     ray.orig = origin;
     ray.dir = lower_left_corner + uv.x * horizontal + uv.y * vertical - origin;
     return ray;

@@ -42,19 +42,13 @@ void Trancing::initBuffers()
     glGenBuffers(1, &pixelVBO);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, pixelVBO);
     glBufferData(GL_SHADER_STORAGE_BUFFER, buff.size() * sizeof(GLfloat), &buff[0], GL_DYNAMIC_COPY);
-    glBindBuffer(GL_ARRAY_BUFFER, pixelVBO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     initWorld(world);
     glGenBuffers(1, &shapeVBO);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shapeVBO);
     glBufferData(GL_SHADER_STORAGE_BUFFER, world.size() * sizeof(Sphere), &world[0], GL_DYNAMIC_COPY);
-    glBindBuffer(GL_ARRAY_BUFFER, shapeVBO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Trancing::renderEx()
@@ -102,6 +96,6 @@ void Trancing::compileAndLinkShaderEx()
 
 int main()
 {
-    SceneRunner runner(Define::windowTitle);
-    return runner.run(std::unique_ptr<Scene>(new Trancing()));
+    SceneRunner runner(Define::windowTitle, std::unique_ptr<Scene>(new Trancing()));
+    return runner.run();
 }

@@ -158,10 +158,7 @@ void Trancing::initBuffers()
     glGenBuffers(1, &pixelVBO);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, pixelVBO);
     glBufferData(GL_SHADER_STORAGE_BUFFER, buff.size() * sizeof(GLfloat), &buff[0], GL_DYNAMIC_COPY);
-    glBindBuffer(GL_ARRAY_BUFFER, pixelVBO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     initWorld(world);
     initMaterial(material);
@@ -170,18 +167,12 @@ void Trancing::initBuffers()
     glGenBuffers(1, &shapeVBO);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shapeVBO);
     glBufferData(GL_SHADER_STORAGE_BUFFER, world.size() * sizeof(Sphere), &world[0], GL_DYNAMIC_COPY);
-    glBindBuffer(GL_ARRAY_BUFFER, shapeVBO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenBuffers(1, &materialVBO);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, materialVBO);
     glBufferData(GL_SHADER_STORAGE_BUFFER, material.size() * sizeof(Material), &material[0], GL_DYNAMIC_COPY);
-    glBindBuffer(GL_ARRAY_BUFFER, materialVBO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 Camera cam;
@@ -232,7 +223,7 @@ void Trancing::renderEx()
 
     computeProg.setUniform("shpereNum", (int)world.size());
     computeProg.setUniform("currentFrame", m_currentFrame);
-    computeProg.setUniform("maxDepth", m_maxDepth);
+    computeProg.setUniform("recursionDepth", m_maxDepth);
     glDispatchCompute((m_width + 7) >> 3, (m_height + 7) >> 3, 1);
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
@@ -254,6 +245,6 @@ void Trancing::compileAndLinkShaderEx()
 
 int main()
 {
-    SceneRunner runner(Define::windowTitle);
-    return runner.run(std::unique_ptr<Scene>(new Trancing()));
+    SceneRunner runner(Define::windowTitle, std::unique_ptr<Scene>(new Trancing()));
+    return runner.run();
 }
