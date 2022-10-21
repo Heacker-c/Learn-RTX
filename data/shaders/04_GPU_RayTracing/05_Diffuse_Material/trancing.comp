@@ -116,15 +116,13 @@ vec3 rayColor(Ray ray)
         {
             ++index;
             ray.orig = rec.p;
-
             ray.dir = rec.normal + random_in_unit_sphere();
-
             ray.tInterval = vec2(0.0001, 99999.999);
             color[index] = vec3(0.5f);
         }
         else
         {
-            float t = 0.5f * (normalize(ray.dir).y + 1.0);
+            float t = 0.5 * (normalize(ray.dir).y + 1.0);
             vec3 white = vec3(1.0, 1.0, 1.0);
             vec3 blue = vec3(0.5, 0.7, 1.0);
             color[0] = (1.0 - t) * white + t * blue;

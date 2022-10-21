@@ -1,10 +1,10 @@
-//ÎïÌåÍâ²à
+ï»¿//ç‰©ä½“å¤–ä¾§
 void set_face_normal(inout HitRecord rec, Ray ray, vec3 outward_normal)
 {
     rec.front_face = dot(ray.dir, outward_normal) < 0;
     rec.normal = rec.front_face ? outward_normal : -outward_normal;
 }
-//SphereÇó½»¼ÆËã
+//Sphereæ±‚äº¤è®¡ç®—
 bool HitSphere(Sphere sph, inout Ray ray, inout HitRecord rec)
 {
     vec3 oc = ray.orig - sph.center;
@@ -32,7 +32,7 @@ bool HitSphere(Sphere sph, inout Ray ray, inout HitRecord rec)
     ray.materialIndex = sph.materialIndex;
     return true;
 }
-//³¡¾°Çó½»
+//åœºæ™¯æ±‚äº¤
 bool hitList(inout Ray ray, inout HitRecord rec)
 {
     HitRecord temp_rec = rec;

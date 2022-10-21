@@ -1,6 +1,9 @@
 set(PROJECT_NAME "Learn-RTX")
 #---------------------------------------
 #set(CMAKE_DEBUG_POSTFIX "d") 
+cmake_minimum_required (VERSION 3.1)
+cmake_policy(VERSION 3.1)
+
 macro(SETUP_PROJECT MODE TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
 	string(REPLACE " " ";" LIST_TARGET_SOURCES ${STR_TARGET_SOURCES})
 	string(REPLACE " " ";" LIST_TARGET_LIBS ${STR_TARGET_LIBS})
@@ -14,7 +17,7 @@ macro(SETUP_PROJECT MODE TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
 	else()
 		if(${MODE} STREQUAL "EXE")
 			add_executable( ${TARGET_NAME} ${LIST_TARGET_SOURCES})
-			set(INSTALL_DIR "bin")
+			set(INSTALL_DIR "build/bin")
 		elseif(${MODE} STREQUAL "LIB")
 			add_library(${TARGET_NAME} ${LIST_TARGET_SOURCES})
 			if (CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -35,10 +38,10 @@ macro(SETUP_PROJECT MODE TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
 				target_link_libraries( ${TARGET_NAME} ${LIST_TARGET_LIBS} )
 			endif()
 			install (TARGETS ${TARGET_NAME} DESTINATION ${INSTALL_DIR})
-			message(STATUS "Setup Project ${Mode} ${FOLDER_NAME}/[${TARGET_NAME}]")
 		endif()
 	endif()
 endmacro(SETUP_PROJECT TARGET_NAME STR_TARGET_SOURCES STR_TARGET_LIBS)
+
 #---------------------------------------
 macro(ADD_ALL_SUBDIR)
 	file(GLOB _children RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*)
@@ -48,11 +51,13 @@ macro(ADD_ALL_SUBDIR)
 			list(APPEND _dirlist ${_child})
 		endif()
 	endforeach()
+
 	#SET(${result} ${dirlist})
 	foreach(_subdir ${_dirlist})
 		add_subdirectory(${_subdir})
 	endforeach()
 endmacro(ADD_ALL_SUBDIR)
+
 #---------------------------------------
 macro(GET_DIR_NAME DIRNAME)
 	string(REGEX MATCH "([^/]*)$" TMP ${CMAKE_CURRENT_SOURCE_DIR})
@@ -79,16 +84,14 @@ endmacro(INSTALL_SHADERS)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-cmake_minimum_required (VERSION 2.8)
-cmake_policy(VERSION 2.8)
 project (${PROJECT_NAME})
 
 # The version number.
 set (${PROJECT_NAME}_VERSION_MAJOR 1)
 set (${PROJECT_NAME}_VERSION_MINOR 0)
 
-
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+
 
 #configure_file(config/config.in ${CMAKE_SOURCE_DIR}/config/config.out)
 #install(FILES "${CMAKE_SOURCE_DIR}/config/config.out"
@@ -101,6 +104,7 @@ include_directories (
 	# $ENV{XXX_INCLUDE_PATH}
 	# ...
 )
+
 link_directories (
 	${PROJECT_SOURCE_DIR}/lib
 	${PROJECT_SOURCE_DIR}/lib/CppUtil/Basic
@@ -111,9 +115,11 @@ link_directories (
 	# ...
 )
 
+#set(DLL_DIR ${PROJECT_SOURCE_DIR}/bin)
+
 FIND_PACKAGE( OpenMP REQUIRED)
 if(OPENMP_FOUND)
-	message("OPENMP FOUND")
+	message(STATUS "OPENMP FOUND")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")

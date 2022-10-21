@@ -15,7 +15,9 @@ void init(const RayVec2& view);
 
 bool near_zero(const RayVec3& e)
 {
-	return (e[0] < 0.00001f) && (e[1] < 0.00001f) && (e[2] < 0.00001f);
+    if (e.r != e.r || e.g != e.g || e.b != e.b)
+        return true;
+	return (e[0] < 0.00003f) && (e[1] < 0.00003f) && (e[2] < 0.00003f);
 }
 
 void updatebuff(Canvas& canvas)
@@ -28,7 +30,7 @@ void updatebuff(Canvas& canvas)
         init(RayVec2(canvas.width(), canvas.height()));
         needInit = false;
     }
-#pragma omp parallel for schedule(dynamic, 4)
+#pragma omp parallel for schedule(dynamic, 16)
     for (int i = 0; i < canvas.height(); i++)
     {
         for (int j = 0; j < canvas.width(); j++)

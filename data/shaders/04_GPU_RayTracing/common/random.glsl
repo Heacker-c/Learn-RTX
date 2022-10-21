@@ -1,4 +1,4 @@
-//²úÉúËæ»úÊı
+ï»¿//äº§ç”Ÿéšæœºæ•°
 
 uint tea(uint val0, uint val1)
 {
@@ -58,33 +58,16 @@ vec3 randomVec3(float min, float max)
 vec3 random_in_unit_sphere()
 {
 #if 1
-    vec3 p = randomVec3(-1.0, 1.0)/* * 0.866025403784*/;
+    vec3 p = randomVec3(-1.0, 1.0);
     float len_2 = length_2(p);
     if(len_2 > 1.0)
         p /= sqrt(len_2);
     return p;
 #else
     const float pi = 3.14159265358979323846f;
-/*
-    float u = random(0.0, 1.0);
-    float v = random(0.0, 1.0);
-    float theta = pi * u;
-    float phi = acos(v - 1.0);
-    float x = sin(theta) * sin(phi);
-    float y = cos(theta) * sin(phi);
-    float z = cos(phi);
-    return vec3(x, y, z);
-//*/
-//*
     float phi = random(0.0, 1.0) * pi;
     float theta = random(-1.0, 1.0) * pi;
     return vec3(sin(phi) * cos(theta), sin(phi) * sin(theta), cos(phi));
-//*/
-    vec3 p = randomVec3(-1.0, 1.0);
-    float len_2 = length_2(p);
-    if(len_2 > 1.0)
-        p /= sqrt(len_2);
-    return p;
 #endif
 }
 
