@@ -46,7 +46,7 @@
 bin option = 111100;
 
 # 根目录
-string RootPath = "E:/learn/ToyRTX-master/master";
+string RootPath = "C:/wdm/Learn-RTX";
 
 # 默认输出图像大小
 #int val_Default_ImgWidth = 640;
@@ -119,25 +119,25 @@ int val_02_the_Next_Week_07_Volume_ImgHeight = 576;
 int val_02_the_Next_Week_08_All_ImgWidth = 576;
 int val_02_the_Next_Week_08_All_ImgHeight = 576;
 
-# 03_GPU_RayTracing / 02_RTXBasicSystem 输出图像大小
-int val_03_GPU_RayTracing_02_RTXBasicSystem_ImgWidth = 960;
-int val_03_GPU_RayTracing_02_RTXBasicSystem_ImgHeight = 640;
+# 04_GPU_RayTracing / 02_RTXBasicSystem 输出图像大小
+int val_04_GPU_RayTracing_02_RTXBasicSystem_ImgWidth = 960;
+int val_04_GPU_RayTracing_02_RTXBasicSystem_ImgHeight = 640;
 
-# 03_GPU_RayTracing / 03_Material 输出图像大小
-int val_03_GPU_RayTracing_03_Material_ImgWidth = 960;
-int val_03_GPU_RayTracing_03_Material_ImgHeight = 640;
+# 04_GPU_RayTracing / 03_Material 输出图像大小
+int val_04_GPU_RayTracing_03_Material_ImgWidth = 960;
+int val_04_GPU_RayTracing_03_Material_ImgHeight = 640;
 
-# 03_GPU_RayTracing / 09_Transform 输出图像大小
-int val_03_GPU_RayTracing_09_Transform_ImgWidth = 576;
-int val_03_GPU_RayTracing_09_Transform_ImgHeight = 576;
+# 04_GPU_RayTracing / 09_Transform 输出图像大小
+int val_04_GPU_RayTracing_09_Transform_ImgWidth = 576;
+int val_04_GPU_RayTracing_09_Transform_ImgHeight = 576;
 
-# 03_GPU_RayTracing / 10_Volume 输出图像大小
-int val_03_GPU_RayTracing_10_Volume_ImgWidth = 576;
-int val_03_GPU_RayTracing_10_Volume_ImgHeight = 576;
+# 04_GPU_RayTracing / 10_Volume 输出图像大小
+int val_04_GPU_RayTracing_10_Volume_ImgWidth = 576;
+int val_04_GPU_RayTracing_10_Volume_ImgHeight = 576;
 
-# 03_GPU_RayTracing / 11_All 输出图像大小
-int val_03_GPU_RayTracing_11_All_ImgWidth = 576;
-int val_03_GPU_RayTracing_11_All_ImgHeight = 576;
+# 04_GPU_RayTracing / 11_All 输出图像大小
+int val_04_GPU_RayTracing_11_All_ImgWidth = 576;
+int val_04_GPU_RayTracing_11_All_ImgHeight = 576;
 
 # 04_Extension / 02_Model 输出图像大小
 int val_04_Extension_02_Model_ImgWidth = 960;
